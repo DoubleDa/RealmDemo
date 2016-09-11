@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">RealmDemoProject</string>
+    <string name="str_btn_realm">使用Realm</string>
+</resources>
