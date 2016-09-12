@@ -5,7 +5,9 @@ import android.widget.Button;
 
 import com.dyx.rdp.base.BaseActivity;
 import com.dyx.rdp.model.Dog;
+import com.dyx.rdp.model.MyObject;
 import com.dyx.rdp.model.Person;
+import com.dyx.rdp.model.Student;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -97,6 +99,57 @@ public class MainActivity extends BaseActivity {
             @Override
             public void onError(Throwable error) {
                 //执行失败
+            }
+        });
+
+        /**
+         * 自动更新
+         */
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                Dog dog2 = realm.createObject(Dog.class);
+                dog2.setName("哈哈");
+                dog2.setAge(2);
+            }
+        });
+
+        Dog dog3 = realm.where(Dog.class).equalTo("age", 3).findFirst();
+
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                Dog dog2 = realm.where(Dog.class).equalTo("age", 1).findFirst();
+                dog2.setAge(2);
+            }
+        });
+
+        dog3.getAge();
+
+        /**
+         * 主键 (primary keys)
+         */
+        final MyObject object = new MyObject();
+        object.setId(123);
+        object.setName("哒哒");
+
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                realm.copyToRealmOrUpdate(object);
+            }
+        });
+
+        /**
+         * 定制对象（Customizing Objects）
+         */
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                Student student = realm.createObject(Student.class);
+                student.name = "哒哒";
+                student.age = 18;
+                student.phoneNum = "18716321583";
             }
         });
     }
